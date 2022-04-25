@@ -2,6 +2,7 @@ package com.mandiri.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
@@ -19,7 +20,9 @@ public class Report {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @JsonFormat(pattern = "dd-mm-yyyy", timezone = "UTC")
+
+//    @JsonFormat(pattern = "dd-mm-yyyy", timezone = "UTC")
+//    @DateTimeFormat(pattern = "dd-mm-yyyy")
     @Column(name = "birth_date", nullable = false)
     private Date birthDate;
 
@@ -34,6 +37,18 @@ public class Report {
 
     @Column(name = "gender", nullable = false, length = 20)
     private String gender;
+
+    public Report() {
+    }
+
+    public Report(String fullName, Date birthDate, String birthPlace, String address, String phoneNumber, String gender) {
+        this.fullName = fullName;
+        this.birthDate = birthDate;
+        this.birthPlace = birthPlace;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.gender = gender;
+    }
 
     public String getId() {
         return id;
@@ -91,4 +106,16 @@ public class Report {
         this.gender = gender;
     }
 
+    @Override
+    public String toString() {
+        return "Report{" +
+                "id='" + id + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", birthDate=" + birthDate +
+                ", birthPlace='" + birthPlace + '\'' +
+                ", address='" + address + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", gender='" + gender + '\'' +
+                '}';
+    }
 }
