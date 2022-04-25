@@ -20,10 +20,11 @@ public class Report {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
-//    @DateTimeFormat(pattern = "dd-mm-yyyy")
+
 //    @JsonFormat(pattern = "dd-mm-yyyy", timezone = "UTC")
+//    @DateTimeFormat(pattern = "dd-mm-yyyy")
     @Column(name = "birth_date", nullable = false)
-    private String birthDate;
+    private Date birthDate;
 
     @Column(name = "birth_place", nullable = false, length = 100)
     private String birthPlace;
@@ -40,7 +41,7 @@ public class Report {
     public Report() {
     }
 
-    public Report(String fullName, String birthDate, String birthPlace, String address, String phoneNumber, String gender) {
+    public Report(String fullName, Date birthDate, String birthPlace, String address, String phoneNumber, String gender) {
         this.fullName = fullName;
         this.birthDate = birthDate;
         this.birthPlace = birthPlace;
@@ -65,11 +66,11 @@ public class Report {
         this.fullName = fullName;
     }
 
-    public String getBirthDate() {
+    public Date getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
 

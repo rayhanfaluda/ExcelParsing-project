@@ -3,10 +3,9 @@ package com.mandiri.helper;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import com.mandiri.entity.Report;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
@@ -19,19 +18,13 @@ import org.springframework.web.multipart.MultipartFile;
 public class ExcelHelper {
     public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     static String[] HEADERs = { "fullName", "birthDate", "birthPlace", "address", "phoneNumber", "gender" };
-    static String SHEET = "Report";
+    static String SHEET = "data";
     public static boolean hasExcelFormat(MultipartFile file) {
-        if (!TYPE.equals(file.getContentType())) {
-            return false;
-        }
-        return true;
+        return TYPE.equals(file.getContentType());
     }
     public static List<Report> excelToReport(InputStream inputStream) {
         try {
-            System.out.println("tryy");
             Workbook workbook = new XSSFWorkbook(inputStream);
-//            Workbook workbook = WorkbookFactory.create(file);
-            System.out.println("abis workbook");
             Sheet sheet = workbook.getSheet(SHEET);
             Iterator<Row> rows = sheet.iterator();
             List<Report> reports = new ArrayList<Report>();
@@ -48,16 +41,16 @@ public class ExcelHelper {
                 int cellIdx = 0;
                 while (cellsInRow.hasNext()) {
                     Cell currentCell = cellsInRow.next();
+                    System.out.println(currentCell.getStringCellValue());
+                    report.setId(String.valueOf(UUID.randomUUID()));
                     switch (cellIdx) {
-//                        case 0:
-//                            report.setId(currentCell.getStringCellValue());
-//                            break;
                         case 1:
                             report.setFullName(currentCell.getStringCellValue());
                             break;
-//                        case 2:
-//                            report.setBirthDate(currentCell.getStringCellValue());
-//                            break;
+                        case 2:
+                            Date date=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(currentCell.getStringCellValue());
+                            report.setBirthDate(date);
+                            break;
                         case 3:
                             report.setBirthPlace(currentCell.getStringCellValue());
                             break;
@@ -76,11 +69,11 @@ public class ExcelHelper {
                     cellIdx++;
                 }
                 System.out.println(report);
-//                reports.add(report);
+                reports.add(report);
             }
             workbook.close();
             return reports;
-        } catch (IOException e) {
+        } catch (IOException | ParseException e) {
             throw new RuntimeException("fail to parse Excel file: " + e.getMessage());
         }
     }
