@@ -17,8 +17,8 @@ public class ReportService {
     @Autowired
     ReportRepository reportRepository;
 
-    public void save(File file) {
-        List<Report> reports = ExcelHelper.excelToReport(file);
+    public void save(MultipartFile file) throws IOException {
+        List<Report> reports = ExcelHelper.excelToReport(file.getInputStream());
         reportRepository.saveAll(reports);
     }
 

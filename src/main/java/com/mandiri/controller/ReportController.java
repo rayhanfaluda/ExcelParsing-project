@@ -26,12 +26,10 @@ public class ReportController {
     @PostMapping("/upload")
     public ResponseEntity<ResponseMessage> exportExcel(@RequestParam(name = "file") MultipartFile file) throws IOException {
         String message = "";
-        Path tempDir = Files.createTempDirectory("");
-        File tempFile = tempDir.resolve(file.getOriginalFilename()).toFile();
         if (ExcelHelper.hasExcelFormat(file)) {
             try {
-                reportService.save(tempFile);
-                message = "Uploaded the file successfully: " + file.getOriginalFilename();
+                reportService.save(file);
+                message = "Uploaded the file successfully: "+ file.getOriginalFilename() + "!";
                 return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
             } catch (Exception e) {
                 message = "Could not upload the file: " + file.getOriginalFilename() + "!";

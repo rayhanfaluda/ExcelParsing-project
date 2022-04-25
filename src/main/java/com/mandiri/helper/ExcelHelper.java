@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import com.mandiri.entity.Report;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
@@ -25,9 +26,12 @@ public class ExcelHelper {
         }
         return true;
     }
-    public static List<Report> excelToReport(File file) {
+    public static List<Report> excelToReport(InputStream inputStream) {
         try {
-            Workbook workbook = WorkbookFactory.create(file);
+            System.out.println("tryy");
+            Workbook workbook = new XSSFWorkbook(inputStream);
+//            Workbook workbook = WorkbookFactory.create(file);
+            System.out.println("abis workbook");
             Sheet sheet = workbook.getSheet(SHEET);
             Iterator<Row> rows = sheet.iterator();
             List<Report> reports = new ArrayList<Report>();
@@ -45,22 +49,25 @@ public class ExcelHelper {
                 while (cellsInRow.hasNext()) {
                     Cell currentCell = cellsInRow.next();
                     switch (cellIdx) {
-                        case 0:
+//                        case 0:
+//                            report.setId(currentCell.getStringCellValue());
+//                            break;
+                        case 1:
                             report.setFullName(currentCell.getStringCellValue());
                             break;
-                        case 1:
-                            report.setBirthDate(currentCell.getDateCellValue());
-                            break;
-                        case 2:
+//                        case 2:
+//                            report.setBirthDate(currentCell.getStringCellValue());
+//                            break;
+                        case 3:
                             report.setBirthPlace(currentCell.getStringCellValue());
                             break;
-                        case 3:
+                        case 4:
                             report.setAddress(currentCell.getStringCellValue());
                             break;
-                        case 4:
+                        case 5:
                             report.setPhoneNumber(currentCell.getStringCellValue());
                             break;
-                        case 5:
+                        case 6:
                             report.setGender(currentCell.getStringCellValue());
                             break;
                         default:
@@ -68,7 +75,8 @@ public class ExcelHelper {
                     }
                     cellIdx++;
                 }
-                reports.add(report);
+                System.out.println(report);
+//                reports.add(report);
             }
             workbook.close();
             return reports;
