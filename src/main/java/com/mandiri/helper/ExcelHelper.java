@@ -6,9 +6,12 @@ import java.util.*;
 import java.io.*;
 
 import com.mandiri.entity.Report;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -56,6 +59,7 @@ public class ExcelHelper {
     }
 
     public static List<Report> excelToReports(InputStream is) {
+        IOUtils.setByteArrayMaxOverride(1024 * 1024 * 1024);
         try {
             Workbook workbook = new XSSFWorkbook(is);
             Sheet sheet = workbook.getSheet(SHEET);
@@ -80,33 +84,30 @@ public class ExcelHelper {
                 int cellIdx = 0;
                 while (cellsInRow.hasNext()) {
                     Cell currentCell = cellsInRow.next();
-
+                    report.setId(UUID.randomUUID().toString());
                     switch (cellIdx) {
                         case 0:
                             report.setFullName(currentCell.getStringCellValue());
                             break;
 
                         case 1:
-                            report.setFullName(currentCell.getStringCellValue());
-                            break;
-
-                        case 2:
-                            Date date=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(currentCell.getStringCellValue());
+                            Date date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(currentCell.getStringCellValue());
                             report.setBirthDate(date);
                             break;
 
-                        case 3:
+                        case 2:
                             report.setBirthPlace(currentCell.getStringCellValue());
                             break;
 
-                        case 4:
+                        case 3:
                             report.setAddress(currentCell.getStringCellValue());
                             break;
 
-                        case 5:
+                        case 4:
                             report.setPhoneNumber(currentCell.getStringCellValue());
                             break;
-                        case 6:
+
+                        case 5:
                             report.setGender(currentCell.getStringCellValue());
                             break;
 
