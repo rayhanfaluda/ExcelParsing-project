@@ -13,12 +13,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 public class ExcelHelper {
-    public static String[] TYPE = {"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-excel"};
+    public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     static String[] HEADER = { "id", "fullName", "birthDate", "birthPlace", "address", "phoneNumber", "gender" };
     static String SHEET = "Report";
   
     public static boolean hasExcelFormat(MultipartFile file) {
-        return Arrays.asList(TYPE).contains(file.getContentType());
+        return TYPE.equals(file.getContentType());
     }
 
     public static ByteArrayInputStream reportsToExcel(List<Report> reports) {
