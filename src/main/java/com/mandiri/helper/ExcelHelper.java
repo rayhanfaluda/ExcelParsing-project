@@ -51,7 +51,8 @@ public class ExcelHelper {
             }
 
             workbook.write(out);
-            workbook.close();
+
+            // Dispose of temporary files backing this workbook on disk
             workbook.dispose();
 
             return new ByteArrayInputStream(out.toByteArray());
