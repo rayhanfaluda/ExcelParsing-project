@@ -6,23 +6,19 @@ import java.util.*;
 import java.io.*;
 
 import com.mandiri.entity.Report;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import com.monitorjbl.xlsx.StreamingReader;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.util.IOUtils;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
 
 public class ExcelHelper {
-    public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-    static String[] HEADERs = { "id", "fullName", "birthDate", "birthPlace", "address", "phoneNumber", "gender" };
+    public static String[] TYPE = {"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-excel"};
+    static String[] HEADER = { "id", "fullName", "birthDate", "birthPlace", "address", "phoneNumber", "gender" };
     static String SHEET = "Report";
   
     public static boolean hasExcelFormat(MultipartFile file) {
-        return TYPE.equals(file.getContentType());
+        return Arrays.asList(TYPE).contains(file.getContentType());
     }
 
     public static ByteArrayInputStream reportsToExcel(List<Report> reports) {
@@ -32,9 +28,9 @@ public class ExcelHelper {
             // Header
             Row headerRow = sheet.createRow(0);
 
-            for (int col = 0; col < HEADERs.length; col++) {
+            for (int col = 0; col < HEADER.length; col++) {
                 Cell cell = headerRow.createCell(col);
-                cell.setCellValue(HEADERs[col]);
+                cell.setCellValue(HEADER[col]);
             }
 
             int rowIdx = 1;
@@ -59,9 +55,11 @@ public class ExcelHelper {
     }
 
     public static List<Report> excelToReports(InputStream is) {
-        IOUtils.setByteArrayMaxOverride(1024 * 1024 * 1024);
         try {
-            Workbook workbook = new XSSFWorkbook(is);
+            Workbook workbook = StreamingReader.builder()
+                    .rowCacheSize(50)    // number of rows to keep in memory (defaults to 10)
+                    .bufferSize(2048)     // buffer size to use when reading InputStream to file (defaults to 1024)
+                    .open(is);            // InputStream or File for XLSX file (required)
             Sheet sheet = workbook.getSheet(SHEET);
             Iterator<Row> rows = sheet.iterator();
 
