@@ -8,7 +8,7 @@ import java.io.*;
 import com.mandiri.entity.Report;
 import com.monitorjbl.xlsx.StreamingReader;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -22,7 +22,10 @@ public class ExcelHelper {
     }
 
     public static ByteArrayInputStream reportsToExcel(List<Report> reports) {
-        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream();) {
+        try (SXSSFWorkbook workbook = new SXSSFWorkbook(1); ByteArrayOutputStream out = new ByteArrayOutputStream();) {
+            // Temporary file compression, lower storage used, but longer response time
+            /* workbook.setCompressTempFiles(true); */
+
             Sheet sheet = workbook.createSheet(SHEET);
 
             // Header
@@ -48,6 +51,9 @@ public class ExcelHelper {
             }
 
             workbook.write(out);
+            workbook.close();
+            workbook.dispose();
+
             return new ByteArrayInputStream(out.toByteArray());
         } catch (IOException e) {
             throw new RuntimeException("fail to import data to Excel file: " + e.getMessage());
@@ -57,7 +63,7 @@ public class ExcelHelper {
     public static List<Report> excelToReports(InputStream is) {
         try {
             Workbook workbook = StreamingReader.builder()
-                    .rowCacheSize(50)    // number of rows to keep in memory (defaults to 10)
+                    .rowCacheSize(50)     // number of rows to keep in memory (defaults to 10)
                     .bufferSize(2048)     // buffer size to use when reading InputStream to file (defaults to 1024)
                     .open(is);            // InputStream or File for XLSX file (required)
             Sheet sheet = workbook.getSheet(SHEET);

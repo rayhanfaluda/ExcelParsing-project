@@ -27,9 +27,9 @@ public class ReportService {
     }
 
     public ByteArrayInputStream load() {
-        List<Report> tutorials = reportRepository.findAll();
+        List<Report> reports = reportRepository.findAll();
 
-        ByteArrayInputStream in = ExcelHelper.reportsToExcel(tutorials);
+        ByteArrayInputStream in = ExcelHelper.reportsToExcel(reports);
         return in;
     }
 
