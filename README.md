@@ -1,9 +1,9 @@
 <a name="top"></a>
 # ExcelParsing v1.0.0
 
-Problem : How to export and import reports (excel) from / to the database and make sure there is no java heapspace memory errors
+Problem: How to export/import Microsoft Excel (.xlsx) file from/to the database and make sure there is no Java heap space memory error.
 
-# Table of contents
+# Table of Contents
 
 - [Upload](#Upload)
 - [Download](#Download)
@@ -13,7 +13,7 @@ ___
 
 # <a name='Upload'></a> Upload
 
-<p>Upload file with xlsx and xls extensions and insert them into the database</p>
+<p>Upload a Microsoft Excel file with .xlsx format and insert them into the database.</p>
 
 ```
 POST /api/v1/upload
@@ -22,12 +22,12 @@ POST /api/v1/upload
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| file | `Multipart` | <p>excel file to be imported to database</p> |
+| file | `Multipart` | <p>Microsoft Excel (.xlsx) file to be imported to the database</p> |
 
 ### Excel File Sample
 ![Screenshot](https://i.ibb.co/0CpYC39/Untitled.png)
 
-### Database Structure
+### Table Structure
 | Name     | Type       |
 |----------|------------|
 | id | `Varchar(50)` |
@@ -49,7 +49,7 @@ POST /api/v1/upload
 
 # <a name='Download'></a> Download
 
-<p>download data from database in excel file form</p>
+<p>Download the data from the database in Microsoft Excel (.xlsx) file format.</p>
 
 ```
 GET /api/v1/download
