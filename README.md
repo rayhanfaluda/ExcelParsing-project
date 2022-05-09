@@ -38,13 +38,8 @@ POST /api/v1/upload
 | phone_number | `Varchar(50)` |
 | gender | `Varchar(50)` |
 
-### Sample Response
-
-  ```
-    {
-        "message": "Uploaded the file successfully: MOCK_DATA (2).xlsx!"
-    }
-  ```
+### Sample Postman
+![Screenshot](<https://i.ibb.co/X5pV9sw/asasa.png)
 
 
 # <a name='Download'></a> Download
@@ -55,6 +50,5 @@ POST /api/v1/upload
 GET /api/v1/download
 ```
 
-### Sample Response
-![Screenshot](https://i.ibb.co/rFH0DSx/Untitleasd.png)
-
+### Sample Postman
+![Screenshot](https://i.ibb.co/JQ7YJGd/asasaasa.png)
