@@ -20,26 +20,26 @@ POST /api/v1/upload
 ```
 ### Parameters - `Request Body Parameters`
 
-| Name     | Type       | Description                           |
-|----------|------------|---------------------------------------|
+| Name | Type        | Description                                  |
+|------|-------------|----------------------------------------------|
 | file | `Multipart` | <p>Microsoft Excel (.xlsx) file to be imported to the database</p> |
 
 ### Excel File Sample
 ![Screenshot](https://i.ibb.co/0CpYC39/Untitled.png)
 
 ### Table Structure
-| Name     | Type       |
-|----------|------------|
-| id | `Varchar(50)` |
-| full_name | `Varchar(255)` |
-| birth_date | `Timestamp` |
-| birth_place | `Varchar(100)` |
-| address | `Varchar(255)` |
-| phone_number | `Varchar(50)` |
-| gender | `Varchar(50)` |
+| Name         | Type           |
+|--------------|----------------|
+| id           | `Varchar(50)`  |
+| full_name    | `Varchar(255)` |
+| birth_date   | `Timestamp`    |
+| birth_place  | `Varchar(100)` |
+| address      | `Varchar(255)` |
+| phone_number | `Varchar(50)`  |
+| gender       | `Varchar(50)`  |
 
 ### Sample Postman
-![Screenshot](<https://i.ibb.co/X5pV9sw/asasa.png)
+![Screenshot](https://i.ibb.co/X5pV9sw/asasa.png)
 
 
 # <a name='Download'></a> Download
