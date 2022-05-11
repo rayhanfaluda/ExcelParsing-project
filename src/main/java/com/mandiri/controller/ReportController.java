@@ -7,6 +7,9 @@ import com.mandiri.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -41,9 +44,13 @@ public class ReportController {
     }
 
     @GetMapping("/reports")
-    public ResponseEntity<List<Report>> getAllReports() {
+    public ResponseEntity<List<Report>> getAllReports(
+        @RequestParam(defaultValue = "1") Integer page,
+        @RequestParam(defaultValue = "10") Integer size
+    ) {
         try {
-            List<Report> reports = reportService.getAllReports();
+            Pageable pageable = PageRequest.of(page-1,size);
+            List<Report> reports = reportService.getAllReports(pageable);
             if (reports.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }

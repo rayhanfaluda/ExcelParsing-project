@@ -4,6 +4,8 @@ import com.mandiri.entity.Report;
 import com.mandiri.helper.ExcelHelper;
 import com.mandiri.repository.ReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,8 +35,8 @@ public class ReportService {
         return in;
     }
 
-    public List<Report> getAllReports() {
-        return reportRepository.findAll();
+    public List<Report> getAllReports(Pageable pageable) {
+        return reportRepository.findAll(pageable).getContent();
     }
 
 }
