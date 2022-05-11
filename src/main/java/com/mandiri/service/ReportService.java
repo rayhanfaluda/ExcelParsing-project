@@ -22,7 +22,18 @@ public class ReportService {
     public void save(MultipartFile file) {
         try {
             List<Report> reports = ExcelHelper.excelToReports(file.getInputStream());
-            reportRepository.saveAll(reports);
+            int batchSize = 1000;
+            int totalObjects = reports.size();
+            for (int i = 0; i < totalObjects; i = i + batchSize) {
+                if( i+ batchSize > totalObjects){
+                    List<Report> reports1 = reports.subList(i, totalObjects-1);
+                    reportRepository.saveAll(reports1);
+                    break;
+                }
+                List<Report> reports1 = reports.subList(i, i + batchSize);
+                reportRepository.saveAll(reports1);
+                System.out.println("Success insert from "+i+" to "+(i+batchSize));
+            }
         } catch (IOException e) {
             throw new RuntimeException("fail to store excel data: " + e.getMessage());
         }
