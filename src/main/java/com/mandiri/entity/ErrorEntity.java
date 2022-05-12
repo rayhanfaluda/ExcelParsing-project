@@ -3,11 +3,12 @@ package com.mandiri.entity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.Date;
 
 @Entity
-@Table(name = "mst_report")
-public class Report {
+@Table(name = "mst_error")
+public class ErrorEntity {
     @Id
     @GeneratedValue(generator = "uuid-generator")
     @GenericGenerator(name = "uuid-generator", strategy = "uuid")
@@ -18,7 +19,7 @@ public class Report {
     private String fullName;
 
 
-//    @JsonFormat(pattern = "dd-mm-yyyy", timezone = "UTC")
+    //    @JsonFormat(pattern = "dd-mm-yyyy", timezone = "UTC")
 //    @DateTimeFormat(pattern = "dd-mm-yyyy")
     @Column(name = "birth_date", nullable = false)
     private Date birthDate;
@@ -35,10 +36,10 @@ public class Report {
     @Column(name = "gender", nullable = false, length = 20)
     private String gender;
 
-    public Report() {
+    public ErrorEntity() {
     }
 
-    public Report(String fullName, Date birthDate, String birthPlace, String address, String phoneNumber, String gender) {
+    public ErrorEntity(String fullName, Date birthDate, String birthPlace, String address, String phoneNumber, String gender) {
         this.fullName = fullName;
         this.birthDate = birthDate;
         this.birthPlace = birthPlace;
@@ -102,8 +103,6 @@ public class Report {
     public void setGender(String gender) {
         this.gender = gender;
     }
-
-
 
     @Override
     public String toString() {

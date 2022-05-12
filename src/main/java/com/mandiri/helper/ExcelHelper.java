@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.*;
 
+import com.mandiri.entity.City;
+import com.mandiri.entity.ErrorEntity;
 import com.mandiri.entity.Report;
 import com.monitorjbl.xlsx.StreamingReader;
 import org.apache.poi.ss.usermodel.*;
@@ -13,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 public class ExcelHelper {
+
     public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     static String[] HEADER = { "id", "fullName", "birthDate", "birthPlace", "address", "phoneNumber", "gender" };
     static String SHEET = "Report";
@@ -61,8 +64,13 @@ public class ExcelHelper {
         }
     }
 
-    public static List<Report> excelToReports(InputStream is) {
+    public static Boolean validate(Report report, List<String> cities) {
+        return (!report.toString().contains("''") && cities.contains(report.getBirthPlace()));
+    }
+
+    public static ArrayList<Object> excelToReports(InputStream is, List<String> cities) {
         try {
+            ArrayList<Object> result = new ArrayList<>();
             Workbook workbook = StreamingReader.builder()
                     .rowCacheSize(50)     // number of rows to keep in memory (defaults to 10)
                     .bufferSize(2048)     // buffer size to use when reading InputStream to file (defaults to 1024)
@@ -71,6 +79,7 @@ public class ExcelHelper {
             Iterator<Row> rows = sheet.iterator();
 
             List<Report> reports = new ArrayList<Report>();
+            List<ErrorEntity> errorEntities = new ArrayList<ErrorEntity>();
 
             int rowNumber = 0;
             while (rows.hasNext()) {
@@ -85,11 +94,13 @@ public class ExcelHelper {
                 Iterator<Cell> cellsInRow = currentRow.iterator();
 
                 Report report = new Report();
+                ErrorEntity errorEntity = new ErrorEntity();
 
                 int cellIdx = 0;
                 while (cellsInRow.hasNext()) {
                     Cell currentCell = cellsInRow.next();
                     report.setId(UUID.randomUUID().toString());
+
                     switch (cellIdx) {
                         case 0:
                             report.setFullName(currentCell.getStringCellValue());
@@ -123,10 +134,24 @@ public class ExcelHelper {
                     cellIdx++;
                 }
                 System.out.println(report);
-                reports.add(report);
+                if (validate(report, cities)) {
+                    reports.add(report);
+                } else {
+                    errorEntity.setAddress(report.getAddress());
+                    errorEntity.setFullName(report.getFullName());
+                    errorEntity.setBirthDate(report.getBirthDate());
+                    errorEntity.setGender(report.getGender());
+                    errorEntity.setBirthPlace(report.getBirthPlace());
+                    errorEntity.setPhoneNumber(report.getPhoneNumber());
+                    errorEntities.add(errorEntity);
+                }
+                System.out.println(errorEntity);
             }
             workbook.close();
-            return reports;
+            System.out.println(reports);
+            result.add(reports);
+            result.add(errorEntities);
+            return result;
         } catch (IOException | ParseException e) {
             throw new RuntimeException("fail to parse Excel file: " + e.getMessage());
         }
