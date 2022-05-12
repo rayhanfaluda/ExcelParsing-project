@@ -49,7 +49,7 @@ public class ReportService {
         int batchSize = 1000;
         int totalObjects = reports.size();
         for (int i = 0; i < totalObjects; i = i + batchSize) {
-            if( i+ batchSize > totalObjects){
+            if(i + batchSize > totalObjects){
                 List<Report> reports1 = reports.subList(i, totalObjects);
                 reportRepository.saveAll(reports1);
                 break;
@@ -65,7 +65,7 @@ public class ReportService {
         int totalObjects = reports.size();
         for (int i = 0; i < totalObjects; i = i + batchSize) {
             if( i+ batchSize > totalObjects){
-                List<ErrorEntity> reports1 = reports.subList(i, totalObjects-1);
+                List<ErrorEntity> reports1 = reports.subList(i, totalObjects);
                 errorEntityRepository.saveAll(reports1);
                 break;
             }
